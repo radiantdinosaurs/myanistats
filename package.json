@@ -1,0 +1,20 @@
+{
+  "name": "mal-analyzer",
+  "version": "1.0.0",
+  "description": "A web app that crunches data from the MyAnimeList API into meaningful summaries.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": "6.11.1"
+  },
+  "author": "radiantdinosaurs",
+  "license": "ISC",
+  "dependencies": {
+    "bower": "1.8.0",
+    "express": "4.15.4",
+    "express-handlebars": "3.0.0"
+  }
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name='viewport'
+      content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
+    <title>Mal-lyzer</title>
+    <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- LOGO/HOME -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">!</a>
+        </div>
+        <!-- SEARCH -->
+        <form class="navbar-form" role="search">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Search...">
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-default">
+								<span class="glyphicon glyphicon-search">
+									<span class="sr-only">Search...</span>
+								</span>
+							</button>
+						</span>
+					</div>
+				</form>
+      </div>
+    </nav>
+    <!-- MAIN BODY -->
+    <div class="jumbotron">
+      <div class="container">
+        {{{body}}}
+      </div>
+    </div>
+    <!-- FOOTER -->
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+      <div class="container">
+      </div>
+    </nav>
+  </body>
+</html>

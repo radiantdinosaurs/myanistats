@@ -1,0 +1,13 @@
+@media (max-width: 767px) {
+    .navbar-fixed-top {
+        position: relative;
+        top: auto;
+    }
+    .navbar-fixed-bottom {
+        position: relative;
+        bottom: auto;
+    }
+    .navbar-collapse {
+        max-height: none;
+    }
+}
