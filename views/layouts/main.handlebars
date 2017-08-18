@@ -4,7 +4,8 @@
     <meta charset="UTF-8"/>
     <meta name='viewport'
       content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
-    <title>Mal-lyzer</title>
+    <title>Mal Analyzer</title>
+
     <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/fontawesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
@@ -15,26 +16,28 @@
       <div class="container-fluid">
         <!-- LOGO/HOME -->
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">!</a>
+          <a class="navbar-brand" href="/">!</a>
         </div>
         <!-- SEARCH -->
-        <form class="navbar-form" role="search">
-					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Search...">
-						<span class="input-group-btn">
-							<button type="submit" class="btn btn-default">
-								<span class="glyphicon glyphicon-search">
-									<span class="sr-only">Search...</span>
-								</span>
-							</button>
-						</span>
-					</div>
-				</form>
+        <ul class="nav navbar-nav navbar-right">
+          <form method ="post" class="navbar-form" role="search" action="/user">
+            <div class="input-group">
+              <input type="text" id="search" name="search" class="form-control" placeholder="Search for a username...">
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-default">
+                  <span class="glyphicon glyphicon-search">
+                    <span class="sr-only">Search...</span>
+                  </span>
+                </button>
+              </span>
+            </div>
+          </form>
+      </ul>
       </div>
     </nav>
     <!-- MAIN BODY -->
     <div class="jumbotron">
-      <div class="container">
+      <div class="container-fluid">
         {{{body}}}
       </div>
     </div>
