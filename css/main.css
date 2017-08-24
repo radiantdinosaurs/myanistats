@@ -14,4 +14,24 @@
 
 body {
   text-align: center;
+  font-family: 'Lato', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Slabo 27px', serif;
+}
+
+.container {
+  width: auto;
+  margin-left: 200px;
+  margin-right: 200px;
+}​
+
+.navbar, .navbar-fixed-top {
+  background-color: #FFFFFF;
+}
+
+.input-group {
+  font-family: 'Lato', sans-serif;
+  color: #88bbd6;
 }
