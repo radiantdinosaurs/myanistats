@@ -7,17 +7,6 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var client = require('node-rest-client').Client;
 var client = new client();
-var Sequelize = require('sequelize');
-var sequelize = new Sequelize('DATABASE', 'USER', 'PASSWORD', {
-  host: 'HOST',
-  dialect: 'DIALECT',
-  port: 'PORT'
-});
-const Producer = sequelize.import(__dirname + '/models/producer');
-const Studio = sequelize.import(__dirname + '/models/studio');
-const Genre = sequelize.import(__dirname + '/models/genre');
-const Licensor = sequelize.import(__dirname + '/models/licensor');
-const Anime = sequelize.import(__dirname + '/models/anime');
 
 app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs');
@@ -26,7 +15,7 @@ app.use(express.static(__dirname + '/css'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/index'));
-app.use('/users', require('./routes/user'));
+app.use('/user-stats', require('./routes/user-stats'));
 
 app.listen(8085, function() {
   console.log('Started on PORT 8085');
