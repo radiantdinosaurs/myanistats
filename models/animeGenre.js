@@ -3,10 +3,26 @@ var sequelize = require('../data/sequelizeDatabase');
 var Anime = require('./anime');
 var Genre = require('./genre');
 
-var AnimeGenre = sequelize.define('anime_genre', {
-  anime_id: Sequelize.INTEGER,
-  genre_id: Sequelize.INTEGER
+module.exports = sequelize.define('anime_genre', {
+    id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: true,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    fk_anime_id_anime_genre: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    fk_genre_id_anime_genre: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    }
+}, {
+    timestamps: false,
+    underscored: true,
+    freezeTableName: true,
+    tableName: 'user_anime'
 });
 
-Anime.belongsToMany(Genre, { through: AnimeGenre});
-Genre.belongsToMany(Anime, { through: AnimeGenre});
