@@ -2,20 +2,19 @@ var Sequelize = require('sequelize');
 var sequelize = require('../data/sequelizeDatabase');
 
 module.exports = sequelize.define('studio', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
-  jikan_id: {
-    type: Sequelize.STRING
-  },
-  studio_name: {
-    type: Sequelize.INTEGER
-  }
+    name: {
+        type: Sequelize.STRING,
+        unique: true,
+        primaryKey: true,
+        allowNull: false
+    },
+    jikan_id: {
+        type: Sequelize.STRING,
+        unique: true
+    }
 }, {
-  timestamps: false,
-  underscored: true,
-  freezeTableName: true,
-  tableName: 'studio'
+    timestamps: false,
+    underscored: true,
+    freezeTableName: true,
+    tableName: 'studio'
 });

@@ -2,13 +2,6 @@ var Sequelize = require('sequelize');
 var sequelize = require('../data/sequelizeDatabase');
 
 module.exports = sequelize.define('user_anime', {
-    id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: true,
-        primaryKey: true,
-        autoIncrement: true
-    },
     fk_anime_id_user_anime: {
         type: Sequelize.INTEGER,
         allowNull: false

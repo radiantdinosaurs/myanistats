@@ -3,10 +3,18 @@ var sequelize = require('../data/sequelizeDatabase');
 var Anime = require('./anime');
 var Licensor = require('./licensor');
 
-var AnimeLicensor = sequelize.define('anime_licensor', {
-  anime_id: Sequelize.INTEGER,
-  licensor_id: Sequelize.INTEGER
+module.exports = sequelize.define('anime_licensor', {
+    fk_anime_id_anime_licensor: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    fk_licensor_id: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+}, {
+    timestamps: false,
+    underscored: true,
+    freezeTableName: true,
+    tableName: 'anime_licensor'
 });
-
-Anime.belongsToMany(Licensor, { through: AnimeLicensor});
-Licensor.belongsToMany(Anime, { through: AnimeLicensor});

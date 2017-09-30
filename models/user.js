@@ -29,7 +29,7 @@ module.exports = sequelize.define('user', {
     type: Sequelize.INTEGER
   },
   days_spent_watching: {
-    type: Sequelize.INTEGER
+    type: Sequelize.DECIMAL(5,2)
   }
 }, {
   timestamps: true,

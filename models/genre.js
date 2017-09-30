@@ -2,16 +2,15 @@ var Sequelize = require('sequelize');
 var sequelize = require('../data/sequelizeDatabase');
 
 module.exports = sequelize.define('genre', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
+  name: {
+      type: Sequelize.STRING,
+      unique: true,
+      primaryKey: true,
+      allowNull: false
   },
   jikan_id: {
-    type: Sequelize.STRING
-  },
-  genre_name: {
-    type: Sequelize.INTEGER
+      type: Sequelize.STRING,
+      unique: true
   }
 }, {
   timestamps: false,
