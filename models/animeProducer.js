@@ -3,10 +3,18 @@ var sequelize = require('../data/sequelizeDatabase');
 var Anime = require('./anime');
 var Producer = require('./producer');
 
-var AnimeProducer = sequelize.define('anime_producer', {
-  anime_id: Sequelize.INTEGER,
-  producer_id: Sequelize.INTEGER
+module.exports = sequelize.define('anime_producer', {
+    fk_anime_id_anime_producer: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    fk_producer_id: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+}, {
+    timestamps: false,
+    underscored: true,
+    freezeTableName: true,
+    tableName: 'anime_producer'
 });
-
-Anime.belongsToMany(Producer, { through: AnimeProducer});
-Producer.belongsToMany(Anime, { through: AnimeProducer});

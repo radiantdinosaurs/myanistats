@@ -1,4 +1,26 @@
-<h1>Welcome!</h1>
-MyAnimeStats crunches data from the MyAnimeList API into meaningful summaries.
-<br>
-To get started, simply search yours or any username from MyAnimeList.
+<div class="panel panel-default col-md-6 col-md-offset-3 col-sm-offset-1" id="default-content">
+    <div class="panel-header">Welcome</div>
+    <div class="panel-body">
+        <div class="row">
+            MyAnimeStats crunches data from the MyAnimeList API into meaningful summaries.
+            <br>
+            To get started, simply search yours or any username from MyAnimeList.
+        </div>
+    </div>
+</div>
+
+<div class='hbs-container'>
+    {{{{raw-helper}}}}
+        <script id="user-results" type="text/x-handlebars-template">
+            <div class="panel panel-default col-md-6 col-md-offset-3 col-sm-offset-1">
+                <div class="panel-header">{{{title}}}</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <canvas id="myChart"></canvas>
+                            <canvas id="myChart2"></canvas>
+                        </div>
+                    </div>
+            </div>
+        </script>
+    {{{{/raw-helper}}}}
+</div>

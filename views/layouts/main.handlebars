@@ -1,50 +1,67 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="UTF-8"/>
-    <meta name='viewport'
-      content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
-    <title>Mal Analyzer</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
+    <title>MyAnimeStats</title>
+
+    <!--SCRIPTS-->
+    <script type="application/javascript"
+            src="http://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.0.beta.6.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/chart.js/dist/chart.js"></script>
+    <script src="/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/javascripts/script.js"></script>
+    <!--END SCRIPTS-->
+
+    <!--STYLESHEETS-->
     <link href="https://fonts.googleapis.com/css?family=Lato|Slabo+27px" rel="stylesheet">
-    <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/fontawesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/./public/stylesheets/main.css" rel="stylesheet">
-  </head>
-  <body>
-    <!-- NAVIGATION BAR -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container-fluid">
-        <!-- LOGO/HOME -->
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/">!</a>
-        </div>
-        <!-- SEARCH -->
-        <ul class="nav navbar-nav navbar-right">
-          <form method ="post" class="navbar-form" role="search" action="/user-stats">
-            <div class="input-group">
-              <input type="text" id="search" name="search" class="form-control" placeholder="Search for a username...">
-              <span class="input-group-btn">
-                <button type="submit" class="btn btn-default">
-                  <span class="glyphicon glyphicon-search">
-                    <span class="sr-only">Search...</span>
-                  </span>
-                </button>
-              </span>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+    <link href="/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="/SpinKit/css/spinners/3-wave.css" rel="stylesheet">
+    <link href="stylesheets/main.css" rel="stylesheet">
+    <!--END STYLESHEETS-->
+</head>
+    <body>
+        <!--NAVIGATION-->
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/"><span class="glyphicon glyphicon-signal" aria-hidden="true"></span></a>
+                <a class="navbar-brand hidden-xs" href="/">MYANIMESTATS</a>
+                <!--SEARCH FORM-->
+                <form class="navbar-form pull-right" method="post" role="search" action="/">
+                    <div class="input-group">
+                        <input type="text" id="search" class="form-control" placeholder="Search">
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-custom" id="search-submit-btn">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <!--END SEARCH FORM-->
             </div>
-          </form>
-      </ul>
-      </div>
-    </nav>
-    <!-- MAIN BODY -->
-    <div class="jumbotron">
-      <div class="container">
-        {{{body}}}
-      </div>
-    </div>
-    <!-- FOOTER -->
-    <nav class="navbar navbar-default navbar-fixed-bottom">
-      <div class="container-fluid">
-      </div>
-    </nav>
-  </body>
+        </div>
+        <!--END NAVIGATION-->
+
+        <!-- MAIN CONTENT BODY (HANDLEBARS)-->
+        <div class="container-fluid">
+            {{{body}}}
+        </div>
+        <!--END MAIN CONTENT BODY (HANDLEBARS)-->
+
+        <!--LOADING OVERLAY-->
+        <div class="loading-overlay" id="loading-overlay">
+            Getting your info...this may take a few minutes...
+            <div class="sk-wave" id="spinner">
+                <div class="sk-rect sk-rect1"></div>
+                <div class="sk-rect sk-rect2"></div>
+                <div class="sk-rect sk-rect3"></div>
+                <div class="sk-rect sk-rect4"></div>
+                <div class="sk-rect sk-rect5"></div>
+            </div>
+        </div>
+        <!--END LOADING OVERLAY-->
+    </body>
 </html>
