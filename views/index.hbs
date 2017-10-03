@@ -1,26 +1,90 @@
-<div class="panel panel-default col-md-6 col-md-offset-3 col-sm-offset-1" id="default-content">
+<!--LANDING PAGE CONTENT-->
+<div class="panel panel-default col-md-8 col-md-offset-2" id="landing-page-content">
     <div class="panel-header">Welcome</div>
-    <div class="panel-body">
-        <div class="row">
-            MyAnimeStats crunches data from the MyAnimeList API into meaningful summaries.
-            <br>
-            To get started, simply search yours or any username from MyAnimeList.
+        <!--WELCOME CARD-->
+        <div class="panel-body">
+            <div class="row">
+                <p>MyAnimeStats crunches data from the MyAnimeList API into meaningful summaries.</p>
+                <br>
+                <p>To get started, simply search yours or any username from MyAnimeList.</p>
+            </div>
         </div>
+        <!--END WELCOME CARD-->
     </div>
 </div>
+<!--END LANDING PAGE CONTENT-->
 
+<!--USER STATS-->
 <div class='hbs-container'>
     {{{{raw-helper}}}}
         <script id="user-results" type="text/x-handlebars-template">
-            <div class="panel panel-default col-md-6 col-md-offset-3 col-sm-offset-1">
-                <div class="panel-header">{{{title}}}</div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <canvas id="myChart"></canvas>
-                            <canvas id="myChart2"></canvas>
+            <!--HEADER-->
+            <div class="panel panel-default col-md-8 col-md-offset-2" id="stats-header">
+                {{title}}
+            </div>
+            <!--END HEADER-->
+
+            <!--CHART-->
+            <div class="panel panel-default col-md-8 col-md-offset-2">
+                <div class="panel-body">
+                    <div class="row">
+                        <canvas id="userBasicStatsDoughnutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!--END CHART-->
+
+            <!--TEXT STATS-->
+            <div class="panel panel-default col-md-8 col-md-offset-2" id="stats-text-panel">
+                <div class="row">
+                    <!--AVERAGE SCORE-->
+                    <div class="col-md-3" id="stats-text-panel">
+                        <div class="panel-body" id="stats-text-panel-body">
+                            <div class="row">
+                                <h4>Your Average Score</h4>
+                                <h2>{{mean_score}}</h2>
+                                <h6>&rsaquo; Compare to the average global score of {{mean_global_score}}</h6>
+                            </div>
                         </div>
                     </div>
+                    <!--END AVERAGE SCORE-->
+                    <!--MOST-WATCHED GENRE-->
+                    <div class="col-md-3" id="stats-text-panel">
+                        <div class="panel-body" id="stats-text-panel-body">
+                            <div class="row">
+                                <h4>Most-Watched Genre</h4>
+                                <h2>{{genre_percent}}%</h2>
+                                <h6>&rsaquo; {{most_watched_genre}} accounts for {{genre_percent}}% of your list</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <!--END MOST-WATCHED GENRE-->
+                    <!--MOST-WATCHED PREMIERED-->
+                    <div class="col-md-3" id="stats-text-panel">
+                        <div class="panel-body" id="stats-text-panel-body">
+                            <div class="row">
+                                <h4>Most-Watched Premiered</h4>
+                                <h2>{{premiered_percent}}%</h2>
+                                <h6>&rsaquo; Most your anime list premiered in {{most_watched_premiered}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <!--END MOST-WATCHED PREMIERED-->
+                    <!--MOST-WATCHED MONTH-->
+                    <div class="col-md-3" id="stats-text-panel">
+                        <div class="panel-body" id="stats-text-panel-body">
+                            <div class="row">
+                                <h4>Most-Watched Month</h4>
+                                <h2>{{most_watched_month_percent}}%</h2>
+                                <h6>&rsaquo; You tend to watch a lot of anime in the month {{most_watched_month}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <!--END MOST-WATCHED MONTH-->
+                </div>
             </div>
+            <!--END TEXT STATS-->
         </script>
     {{{{/raw-helper}}}}
 </div>
+<!--END USER STATS-->

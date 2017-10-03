@@ -1,5 +1,5 @@
-$(document).ready(function(){
-    $('#loading-overlay').hide();
+$(document).ready(function() {
+    $('#loading-overlay').hide(); // Hiding the loading overlay
     $('#search-submit-btn').click(function(e) {
         e.preventDefault();
         let user = $('#search').val();
@@ -12,92 +12,79 @@ $(document).ready(function(){
             beforeSend: function(){$('#loading-overlay').show();},
             complete: function(){$('#loading-overlay').hide();},
             success: function(data) {
-                $('#default-content').hide();
-                console.log(data);
-                var source = $('#user-results').html();
-                var template = Handlebars.compile(source);
-                var html = template({
+                $('#landing-page-content').hide(); // Hiding any content on the page that isn't user stats
+                let source = $('#user-results').html();
+                let template = Handlebars.compile(source);
+                let userStats = template({
                     title: data.name,
-                    days_spent_watching: data.days_spent_watching,
+                    mean_score: data.mean_score,
+                    mean_global_score: data.mean_global_score,
+                    genre_percent: data.most_watched_genre_percent,
+                    most_watched_genre: data.most_watched_genre,
+                    premiered_percent: data.most_watched_premiered_percent,
+                    most_watched_premiered: data.most_watched_premiered,
+                    most_watched_month: data.most_watched_month,
+                    most_watched_month_percent: data.most_watched_month_percent
                 });
-                $('.hbs-container').prepend(html);
+                $('.hbs-container').prepend(userStats);
 
-
-                userBasicStats = {
+                let userBasicStats = {
                     labels: [
                         'Completed',
                         'Currently Watching',
                         'Dropped',
                         'On Hold',
-                        'Plan to Watch'
-                    ],
+                        'Plan to Watch'],
                     datasets: [{
-                        data: [data.completed, data.currently_watching, data.dropped, data.on_hold,
-                        data.plan_to_watch],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(250, 250, 250, 1)',
-                            'rgba(250, 250, 250, 1)',
-                            'rgba(250, 250, 250, 1)',
-                            'rgba(250, 250, 250, 1)',
-                            'rgba(250, 250, 250, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                };
-                var ctx = document.getElementById("myChart");
-                var myDoughnutChart = new Chart(ctx, {
-                    type: 'pie',
-                    data: userBasicStats
-                });
-
-                genreStarts = {
-                    labels: [
-                        'Completed',
-                        'Currently Watching',
-                        'Dropped',
-                        'On Hold',
-                        'Plan to Watch'
-                    ],
-                    datasets: [{
-                        data: [data.completed, data.currently_watching, data.dropped, data.on_hold,
+                        data: [
+                            data.completed,
+                            data.currently_watching,
+                            data.dropped,
+                            data.on_hold,
                             data.plan_to_watch],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
                             'rgba(255, 206, 86, 0.2)',
                             'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)'
-                        ],
+                            'rgba(153, 102, 255, 0.2)'],
                         borderColor: [
                             'rgba(250, 250, 250, 1)',
                             'rgba(250, 250, 250, 1)',
                             'rgba(250, 250, 250, 1)',
                             'rgba(250, 250, 250, 1)',
-                            'rgba(250, 250, 250, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
+                            'rgba(250, 250, 250, 1)'],
+                        hoverBackgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)'],
+                        hoverBorderColor: [
+                            'rgba(250, 250, 250, 1)',
+                            'rgba(250, 250, 250, 1)',
+                            'rgba(250, 250, 250, 1)',
+                            'rgba(250, 250, 250, 1)',
+                            'rgba(250, 250, 250, 1)'],
+                        borderWidth: 1}]
                 };
-                var ctx = document.getElementById("myChart2");
-                var myDoughnutChart2 = new Chart(ctx, {
-                    type: 'pie',
-                    data: genreStarts
+                let ctx = document.getElementById("userBasicStatsDoughnutChart");
+                let userBasicStatsDoughnutChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: userBasicStats,
+                    options: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
                 });
-
-
 
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(XMLHttpRequest);
                 console.log(textStatus);
                 console.log(errorThrown);
-            }});
+            }
+        });
     });
 });
