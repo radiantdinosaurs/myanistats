@@ -1,5 +1,5 @@
 var Sequelize = require('sequelize');
-var sequelize = require('../data/sequelizeDatabase');
+var sequelize = require('./sequelizeDatabase');
 var Anime = require('./anime');
 var Producer = require('./producer');
 

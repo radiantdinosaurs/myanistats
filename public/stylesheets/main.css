@@ -2,9 +2,10 @@
     .navbar .navbar-form {
         width: 185px;
         padding-left:0;
-        padding-right:1;
+        padding-right:0;
     }
 }
+
 @media(min-width:768px) {
     .navbar .navbar-form {
         width: 250px;
@@ -13,12 +14,14 @@
 
 body {
     margin: 0;
-    background-color: #eeeeee;
+    padding-top: 5em;
+    background-color: #F4F8F9;
 }
 
 .loading-overlay {
-    background: #FFFFFF;
-    color: #666666;
+    background: #315C72;
+    color: #FFFFFF;
+    font-size: 20px;
     position: fixed;
     height: 100%;
     width: 100%;
@@ -30,7 +33,10 @@ body {
     padding-top: 25%;
 }
 
-/*NAVIGATION*/
+.sk-wave .sk-rect {
+    background-color: #FFFFFF;
+}
+
 .navbar .navbar-default .navbar-fixed-top {
     color: #FFFFFF;
     padding-top: 0;
@@ -38,22 +44,25 @@ body {
     margin-right: 0;
     margin-left: 0;
     width: 100%;
-    background-color: #0d47a1;
+    background-color: #315C72;
     border: none;
 }
+
 .navbar-default {
     border: none;
     box-shadow: 0 2px 5px rgba(0,0,0,0.10), 0 2px 5px rgba(0,0,0,0.23);
 }
+
 .navbar-header {
     padding-top: 0;
     padding-bottom: 0;
     margin-right: 0;
     margin-left: 0;
     width: 100%;
-    background-color: #0d47a1;
+    background-color: #315C72;
     border: none;
 }
+
 .navbar-brand {
     text-shadow: none;
     color: #FFFFFF;
@@ -65,7 +74,7 @@ body {
 .navbar-form {
     -webkit-box-shadow: none;
     box-shadow: none;
-    background-color: #0d47a1;
+    background-color: #315C72;
     font-family: 'Lato', sans-serif;
     color: #FFFFFF;
     padding-top: 0;
@@ -75,22 +84,23 @@ body {
     width: 100%;
     border: none;
 }
+
 .navbar-default .navbar-brand {
     color: #FFFFFF;
 }
 
-/*INPUT*/
 .input-group {
     font-family: 'Lato', sans-serif;
     color: #FFFFFF;
 }
+
 .form-control {
     border-left: 0;
     border-right: 0;
     border-top: 0;
     border-bottom: solid;
     border-bottom-color: #FFFFFF;
-    background-color: #0d47a1;
+    background-color: #315C72;
     border-radius: 0;
     box-shadow: none;
     text-align: left;
@@ -98,7 +108,7 @@ body {
 }
 
 .form-control:focus {
-    border-color: #002171;
+    border-color: #B1CAD6;
 }
 
 .input-group {
@@ -131,10 +141,11 @@ input:-webkit-autofill:active {
 }
 
 .btn-custom {
-    background-color: #0d47a1 !important;
+    background-color: #315C72 !important;
     color: #FFF !important;
     -webkit-font-smoothing: antialiased;
 }
+
 .btn:focus,.btn:active {
     outline: none !important;
     box-shadow:none !important;
@@ -143,29 +154,60 @@ input:-webkit-autofill:active {
 .panel {
     background-color: #fafafa;
     padding: 0;
-    margin-top: 5em;
-    margin-bottom: 5em;
+    margin-top: 0;
+    margin-bottom: .55em;
     border: 0;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    text-align: center;
 }
+
 .panel-header {
     font-family: 'Slabo 27px', serif;
     font-size: 27px;
     text-align: center;
     color: #FFFFFF;
-    background-color: #5472d3;
-    padding: 1em;
-    border-top-right-radius: .2em;
-    border-top-left-radius: .2em;
+    background-color: #8DB5C9;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    border-top-right-radius: .1em;
+    border-top-left-radius: .1em;
 }
 .panel-body {
-    padding: 2em;
+    padding: 1.3em;
     margin: 0;
     color: #212121;
 }
 
+#stats-header {
+    font-family: 'Slabo 27px', serif;
+    font-size: 27px;
+    color: white;
+    background-color: #8DB5C9;
+    padding: .5em;
+}
+
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Slabo 27px', serif;
+  font-family: 'Lato', sans-serif;
     text-align: center;
     color: #212121;
+    padding: 0;
+    margin: 0;
+}
+
+#stats-text-panel {
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: .55em;
+    padding-top: 0;
+}
+
+#stats-text-panel-body {
+    border-top-right-radius: .1em;
+    border-top-left-radius: .1em;
+    border: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    text-align: center;
+    background-color: #fafafa;
+    height: 8.5em;
 }

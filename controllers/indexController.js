@@ -1,5 +1,5 @@
 require('events').EventEmitter.prototype._maxListeners = 200;
-let sequelize = require('../data/sequelizeDatabase');
+let sequelize = require('../models/sequelizeDatabase');
 let async = require('async');
 var client = require('node-rest-client').Client;
 var client = new client();
@@ -81,28 +81,34 @@ exports.post_user = function(request, response, next) {
             console.log('Didn\'t find user. Looking for them...');
             let userName = request.body.user; // Username posted in the body of the web app
             let args = {path: {'id': userName}}; // Setting the arguments for the MAL API request path
+            // TODO: Add in error handling if user is not found in MAL
             client.get('http://myanimelist.net/malappinfo.php?u=${id}&status=all&type=anime', args, function(req, res) {
-                let malUserData = req.myanimelist.myinfo; // Only the user's information, no anime
-                let malUserAnimeData = req.myanimelist.anime; // The user's list of anime
-                // Inserting the user into the database
-                User.findOrCreate({
-                    where: {
-                        id: malUserData.user_id
-                    },
-                    defaults: {
-                        id: malUserData.user_id,
-                        name: malUserData.user_name,
-                        watching: malUserData.user_watching,
-                        completed: malUserData.user_completed,
-                        on_hold: malUserData.user_onhold,
-                        dropped: malUserData.user_dropped,
-                        plan_to_watch: malUserData.user_plantowatch,
-                        days_spent_watching: malUserData.user_days_spent_watching
-                    }
-                }).spread((user) => {
-                    console.log('Found user!');
-                    callback(null, user, malUserAnimeData);
-                });
+                if(req.myanimelist.myinfo === undefined) {
+                    response.json({'title': 'user_not_found'})
+                }
+                else {
+                    let malUserData = req.myanimelist.myinfo; // Only the user's information, no anime
+                    let malUserAnimeData = req.myanimelist.anime; // The user's list of anime
+                    // Inserting the user into the database
+                    User.findOrCreate({
+                        where: {
+                            id: malUserData.user_id
+                        },
+                        defaults: {
+                            id: malUserData.user_id,
+                            name: malUserData.user_name,
+                            watching: malUserData.user_watching,
+                            completed: malUserData.user_completed,
+                            on_hold: malUserData.user_onhold,
+                            dropped: malUserData.user_dropped,
+                            plan_to_watch: malUserData.user_plantowatch,
+                            days_spent_watching: malUserData.user_days_spent_watching
+                        }
+                    }).spread((user) => {
+                        console.log('Found user!');
+                        callback(null, user, malUserAnimeData);
+                    });
+                }
             }).on('error', function (err) {
                 console.log('Something went wrong on the request', err.malUserData.options);
             });
@@ -211,6 +217,7 @@ exports.post_user = function(request, response, next) {
         }
     }
 
+    // TODO: Find out why response is sent to AJAX here when user has long list
     /**
      * Sends requests to Jikan API for anime not in the database
      * @param malAnimeData User's list of anime (anime not found in the database)
@@ -619,22 +626,33 @@ exports.post_user = function(request, response, next) {
      * @param callback Called on success
      */
     function processInformation(user, anime, genre, callback) {
-        let userData ={};
+        let userData ={}; // JSON object to hold all user's data for response
+        var genreII = {}; // Holds all genre on user's anime list
+        var premiered = {}; // Holds all premiered dates on user's anime list
+        var monthII = {}; // Holds all months user watched anime on their list
+        var totalPremiered; // Total of all premiered instances summed
+        var totalGenre; // Total of all genre instances summed
+        var totalMonth; // Total of all month instances summed
+
+        // Setting some values in the user object
         userData['name'] = user.dataValues.name;
         userData['currently_watching'] = user.dataValues.watching;
         userData['completed'] = user.dataValues.completed;
         userData['on_hold'] = user.dataValues.on_hold;
         userData['dropped'] = user.dataValues.dropped;
-        userData['plan_to_watch'] = user.dataValues.plan_to_watch,
-        userData['days_spent_watching'] = user.dataValues.days_spent_watching,
+        userData['plan_to_watch'] = user.dataValues.plan_to_watch;
+        userData['days_spent_watching'] = user.dataValues.days_spent_watching;
         userData['total_anime'] = anime.length;
+
+        // Setting these values to 0 initially
         var totalRatedAnime = 0;
         var totalWatchedEpisodes = 0;
         var meanScore = 0;
         var meanGlobalScore = 0;
-        var premiered = {};
-        var genreCount = {};
-        var monthStarted = {};
+
+        // Name of all months
+        let monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
 
         // Iterates through the anime list, adding up total watched episodes and mean global/user scores
         let getTotalWatchedEpisodesAndMeanScores = function(completedRequests) {
@@ -653,25 +671,54 @@ exports.post_user = function(request, response, next) {
             }
         };
         getTotalWatchedEpisodesAndMeanScores(0);
+        userData['mean_score'] = meanScore.toFixed(2);
+        userData['mean_global_score'] = meanGlobalScore.toFixed(2);
 
-        // Makes a list of genre with not duplicate keys and a value of how much each key occurred in the original list
+        // Makes a list of genre with no duplicate keys and a value of each key occurrence in the original list
         for(let i = 0; i < genre.length; i++) {
             for(let j = 0; j < genre[i].length; j++) {
-                genreCount[genre[i][j].dataValues.name] = (genreCount[genre[i][j].dataValues.name] || 0) + 1;
+                genreII[genre[i][j].dataValues.name] = (genreII[genre[i][j].dataValues.name] || 0) + 1;
             }
         }
-        //genreCount = sortProperties(genreCount, true);
-        userData['genre'] = genreCount;
+        genreII = sortProperties(genreII, true);
+        totalGenre = sumProperties(genreII);
+        let mostWatchedPercent = genreII[0][1]/totalGenre * 100;
+        userData['most_watched_genre'] = genreII[0][0];
+        userData['most_watched_genre_percent'] = mostWatchedPercent.toFixed(0);
 
-        // for(let i = 0; i < anime.length; i++) {
-        //     if(anime[i].dataValues.premiered !== null) {
-        //         // TODO: Get premieried list working
-        //         //premiered[anime[i].dataValues.premiered] = (premiered[anime.dataValues.premiered] || 0) + 1;
-        //     }
-        // }
-        // //premiered = sortProperties(premiered, true);
-        // //console.log(premiered)
+        // Makes a list of premiered with no duplicate kets abd a value of each key occurrence in the original list
+        for(let i = 0; i < anime.length; i++) {
+            if(anime[i].premiered !== null) {
+                premiered[anime[i].premiered] = (premiered[anime[i].premiered] || 0) + 1;
+            }
+            else {
+                i++;
+            }
+        }
+        premiered = sortProperties(premiered, true);
+        totalPremiered = sumProperties(premiered);
+        let mostWatchedPremiered = premiered[0][1]/totalPremiered * 100;
+        userData['most_watched_premiered'] = premiered[0][0];
+        userData['most_watched_premiered_percent'] = mostWatchedPremiered.toFixed(0);
 
+        for(let i = 0; i < anime.length; i++) {
+            if(anime[i].dataValues.users[0].user_anime.my_start_date !== null) {
+                var date = new Date(anime[i].dataValues.users[0].user_anime.my_start_date);
+                var month = monthNames[date.getMonth()];
+                monthII[month] = (monthII[month] || 0) + 1;
+            }
+            else {
+                i++;
+            }
+        }
+        monthII = sortProperties(monthII, true);
+        if(monthII.length !== 0) {
+            totalMonth = sumProperties(monthII);
+            let mostWatchedMonth = monthII[0][1]/totalMonth * 100;
+            userData['most_watched_month'] = monthII[0][0];
+            userData['most_watched_month_percent'] = mostWatchedMonth.toFixed(0);
+        }
+        console.log("Done!");
         callback(null, userData);
     }
 
@@ -742,17 +789,17 @@ exports.post_user = function(request, response, next) {
      }
 
     /**
-     * Returns a list in descending values, sorted by values (not keys)
-     * @param obj List to be sorted
+     * Returns a list in descending values, sorted by values
+     * @param object List to be sorted
      * @param isNumericSort Boolean true if objects are sorted numerically
      * @returns {Array}
      */
-    function sortProperties(obj, isNumericSort) {
+    function sortProperties(object, isNumericSort) {
         isNumericSort = isNumericSort || false;
         var sortable = [];
-        for(var key in obj)
-            if(obj.hasOwnProperty(key))
-                sortable.push([key, obj[key]]);
+        for(var key in object)
+            if(object.hasOwnProperty(key))
+                sortable.push([key, object[key]]);
         if(isNumericSort)
             sortable.sort(function(a, b) {
                 return b[1]-a[1];
@@ -767,4 +814,16 @@ exports.post_user = function(request, response, next) {
         return sortable;
     }
 
+    /**
+     * Returns a sum of values in an array
+     * @param array Array to be summed
+     * @returns {number}
+     */
+    function sumProperties(array) {
+        var sum = 0;
+        for(var i = 0; i < array.length; i++){
+            sum += array[i][1];
+        }
+        return sum;
+    }
 };

@@ -1,5 +1,5 @@
 var Sequelize = require('sequelize');
-var sequelize = require('../data/sequelizeDatabase');
+var sequelize = require('./sequelizeDatabase');
 
 module.exports = sequelize.define('producer', {
     name: {
