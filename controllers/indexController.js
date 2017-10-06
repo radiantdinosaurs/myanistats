@@ -34,7 +34,7 @@ Studio.belongsToMany(Anime, {through: {model: AnimeStudio, unique: false}, forei
 // Syncing database
 sequelize.sync();
 
-exports.post_user = function(request, response, next) {
+module.exports.post_user = function(request, response, next) {
 
     async.waterfall([
         findUser,
@@ -393,6 +393,14 @@ exports.post_user = function(request, response, next) {
                     console.log("Making genre lists...");
                     console.log(jikanAnime[completedRequests].genre)
                     uniqueListCreator(genreList, jikanAnime[completedRequests].genre);
+
+                    console.log("Initial Array: ");
+                    console.log(relationshipGenre);
+                    console.log("Id: " + jikanAnime[completedRequests].id);
+                    console.log("data: ");
+                    console.log(jikanAnime[completedRequests].genre)
+
+
                     relationshipTableListCreator(relationshipGenre, jikanAnime[completedRequests].id,
                         jikanAnime[completedRequests].genre, 'fk_anime_id_anime_genre', 'fk_genre_id');
                     makeGenreList(completedRequests+1);
@@ -722,30 +730,21 @@ exports.post_user = function(request, response, next) {
         callback(null, userData);
     }
 
-    /**
-     * Creates a list in the format of relationship tables (e.g. {key: 'value', other_key: 'value'})
-     * @param array Array that we will hold all formatted values
-     * @param animeId Key for objects
-     * @param data Data that needs to be formatted for array
-     * @param animeIdFk Foreign key for anime id, unique to particular table/list
-     * @param fk Foreign key, unique to particular table/list
-     */
-    function relationshipTableListCreator(array, animeId, data, animeIdFk, fk) {
-        // If the data has more than one element
-        if(data[0].length === 2) {
-            for(var i in data) {
-                let element = data[i] + '';
-                let elementArray = element.split(','); // Splitting the element at the ',', making it into an array
-                let elementName = elementArray[1]; // We only need index one of the array, which has the name
-                let obj = {};
-                obj[animeIdFk] = animeId;
-                obj[fk] = elementName.replace('</a>  </div>','');
-                array.push(obj);
-            }
-        }
-        // If the data only has one element
-        else {
-            let element = data + '';
+};
+
+/**
+ * Creates a list in the format of relationship tables (e.g. {key: 'value', other_key: 'value'})
+ * @param array Array that we will hold all formatted values
+ * @param animeId Key for objects
+ * @param data Data that needs to be formatted for array
+ * @param animeIdFk Foreign key for anime id, unique to particular table/list
+ * @param fk Foreign key, unique to particular table/list
+ */
+function relationshipTableListCreator(array, animeId, data, animeIdFk, fk) {
+    // If the data has more than one element
+    if(data[0].length === 2) {
+        for(var i in data) {
+            let element = data[i] + '';
             let elementArray = element.split(','); // Splitting the element at the ',', making it into an array
             let elementName = elementArray[1]; // We only need index one of the array, which has the name
             let obj = {};
@@ -754,76 +753,86 @@ exports.post_user = function(request, response, next) {
             array.push(obj);
         }
     }
+    // If the data only has one element
+    else {
+        let element = data + '';
+        let elementArray = element.split(','); // Splitting the element at the ',', making it into an array
+        let elementName = elementArray[1]; // We only need index one of the array, which has the name
+        let obj = {};
+        obj[animeIdFk] = animeId;
+        obj[fk] = elementName.replace('</a>  </div>','');
+        array.push(obj);
+    }
+}
 
-    /**
-     * Returns a list with no duplicate values
-     * @param array Array that will hold all values
-     * @param data Elements to add to the array
-     */
-    function uniqueListCreator(array, data) {
-        // TODO: Add in logic to remove duplicate values
-        // If the data has more than one element
-        if(data[0].length === 2) {
-            for(var i in data) {
-                let element = data[i] + '';
-                let elementArray = element.split(',');
-                let elementName = elementArray[1];
-                let elementJikanId = elementArray[0];
-                let obj = {};
-                obj['name'] = elementName.replace('</a>  </div>','');
-                obj['jikan_id'] = elementJikanId;
-                array.push(obj);
-            }
-        }
-        // If the data only has one element
-        else {
-            let element = data + '';
+/**
+ * Returns a list with no duplicate values
+ * @param array Array that will hold all values
+ * @param data Elements to add to the array
+ */
+function uniqueListCreator(array, data) {
+    // TODO: Add in logic to remove duplicate values
+    // If the data has more than one element
+    if(data[0].length === 2) {
+        for(var i in data) {
+            let element = data[i] + '';
             let elementArray = element.split(',');
             let elementName = elementArray[1];
             let elementJikanId = elementArray[0];
             let obj = {};
-            obj['name'] = elementName.replace('</a>  </div>', '');
+            obj['name'] = elementName.replace('</a>  </div>','');
             obj['jikan_id'] = elementJikanId;
             array.push(obj);
         }
-     }
-
-    /**
-     * Returns a list in descending values, sorted by values
-     * @param object List to be sorted
-     * @param isNumericSort Boolean true if objects are sorted numerically
-     * @returns {Array}
-     */
-    function sortProperties(object, isNumericSort) {
-        isNumericSort = isNumericSort || false;
-        var sortable = [];
-        for(var key in object)
-            if(object.hasOwnProperty(key))
-                sortable.push([key, object[key]]);
-        if(isNumericSort)
-            sortable.sort(function(a, b) {
-                return b[1]-a[1];
-            });
-        else
-            sortable.sort(function(a, b)
-            {
-                var x = a[1].toLowerCase(),
-                    y = b[1].toLowerCase();
-                return x < y ? -1 : x > y ? 1 : 0;
-            });
-        return sortable;
     }
-
-    /**
-     * Returns a sum of values in an array
-     * @param array Array to be summed
-     * @returns {number}
-     */
-    function sumProperties(array) {
-        var sum = 0;
-        for(var i = 0; i < array.length; i++){
-            sum += array[i][1];
-        }
-        return sum;
+    // If the data only has one element
+    else {
+        let element = data + '';
+        let elementArray = element.split(',');
+        let elementName = elementArray[1];
+        let elementJikanId = elementArray[0];
+        let obj = {};
+        obj['name'] = elementName.replace('</a>  </div>', '');
+        obj['jikan_id'] = elementJikanId;
+        array.push(obj);
     }
-};
+}
+
+/**
+ * Returns a list in descending values, sorted by values
+ * @param object List to be sorted
+ * @param isNumericSort Boolean true if objects are sorted numerically
+ * @returns {Array}
+ */
+function sortProperties(object, isNumericSort) {
+    isNumericSort = isNumericSort || false;
+    var sortable = [];
+    for(var key in object)
+        if(object.hasOwnProperty(key))
+            sortable.push([key, object[key]]);
+    if(isNumericSort)
+        sortable.sort(function(a, b) {
+            return b[1]-a[1];
+        });
+    else
+        sortable.sort(function(a, b)
+        {
+            var x = a[1].toLowerCase(),
+                y = b[1].toLowerCase();
+            return x < y ? -1 : x > y ? 1 : 0;
+        });
+    return sortable;
+}
+
+/**
+ * Returns a sum of values in an array
+ * @param array Array to be summed
+ * @returns {number}
+ */
+function sumProperties(array) {
+    var sum = 0;
+    for(var i = 0; i < array.length; i++){
+        sum += array[i][1];
+    }
+    return sum;
+}
