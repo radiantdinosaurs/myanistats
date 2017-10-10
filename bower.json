@@ -1,0 +1,24 @@
+{
+  "name": "myanimestats",
+  "description": "A web app that crunches data from the MyAnimeList API into meaningful summaries.",
+  "main": "index.js",
+  "authors": [
+    "radiantdinosaurs"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/radiantdinosaurs/myanimestats",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.2.1",
+    "SpinKit": "spinkit#^1.2.5",
+    "chart.js": "^2.7.0"
+  }
+}

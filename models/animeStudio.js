@@ -1,7 +1,5 @@
 var Sequelize = require('sequelize');
 var sequelize = require('./sequelizeDatabase');
-var Anime = require('./anime');
-var Studio = require('./Studio');
 
 module.exports = sequelize.define('anime_studio', {
     fk_anime_id_anime_studio: {

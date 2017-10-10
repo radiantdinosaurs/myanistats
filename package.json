@@ -1,10 +1,12 @@
 {
-  "name": "mal-analyzer",
+  "name": "myanimestats",
   "version": "1.0.0",
   "description": "A web app that crunches data from the MyAnimeList API into meaningful summaries.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "start": "node app.js",
+    "test": "mocha",
+    "postinstall": "bower install"
   },
   "engines": {
     "node": "6.11.1"
@@ -12,17 +14,17 @@
   "author": "radiantdinosaurs",
   "license": "ISC",
   "dependencies": {
-    "async": "^2.5.0",
-    "body-parser": "^1.18.2",
-    "bower": "^1.8.2",
-    "chai": "^4.1.2",
-    "express": "^4.16.1",
-    "express-handlebars": "^3.0.0",
-    "handlebars": "^4.0.10",
-    "mocha": "^4.0.0",
-    "mysql2": "^1.4.2",
-    "node-rest-client": "^3.1.0",
-    "request": "^2.83.0",
-    "sequelize": "^4.13.0"
+    "async": "2.5.0",
+    "body-parser": "1.18.2",
+    "bower": "1.8.2",
+    "chai": "4.1.2",
+    "express": "4.16.1",
+    "express-handlebars": "3.0.0",
+    "handlebars": "4.0.10",
+    "mocha": "4.0.0",
+    "mysql2": "1.4.2",
+    "node-rest-client": "3.1.0",
+    "request": "2.83.0",
+    "sequelize": "4.13.0"
   }
 }
