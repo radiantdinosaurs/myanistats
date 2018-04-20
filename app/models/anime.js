@@ -2,12 +2,12 @@ var Sequelize = require('sequelize');
 var sequelize = require('./sequelizeDatabase');
 
 module.exports = sequelize.define('anime', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: false,
-    allowNull: false,
-    primaryKey: true,
-    unique: true
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: false,
+        allowNull: false,
+        primaryKey: true,
+        unique: true
   },
   link_canonical: {
     type: Sequelize.STRING
