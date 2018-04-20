@@ -2,10 +2,11 @@
   "name": "myanimestats",
   "version": "1.0.0",
   "description": "A web app that crunches data from the MyAnimeList API into meaningful summaries.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "mocha",
+    "start": "node app/app.js",
+    "test": "mocha app/**/**.spec.js",
+    "lint": "eslint .",
     "postinstall": "bower install"
   },
   "engines": {
@@ -17,14 +18,24 @@
     "async": "2.5.0",
     "body-parser": "1.18.2",
     "bower": "1.8.2",
-    "chai": "4.1.2",
     "express": "4.16.1",
     "express-handlebars": "3.0.0",
     "handlebars": "4.0.10",
-    "mocha": "4.0.0",
+    "moment": "^2.22.1",
     "mysql2": "1.4.2",
     "node-rest-client": "3.1.0",
     "request": "2.83.0",
-    "sequelize": "4.13.0"
+    "sequelize": "^4.13.0",
+    "winston": "^2.4.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^5.1.1"
   }
 }
