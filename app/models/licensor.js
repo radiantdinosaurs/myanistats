@@ -1,5 +1,5 @@
-var Sequelize = require('sequelize');
-var sequelize = require('./sequelizeDatabase');
+const Sequelize = require('sequelize')
+const sequelize = require('../config/index')
 
 module.exports = sequelize.define('licensor', {
     name: {
@@ -17,4 +17,4 @@ module.exports = sequelize.define('licensor', {
     underscored: true,
     freezeTableName: true,
     tableName: 'licensor'
-});
+})

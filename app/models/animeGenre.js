@@ -1,7 +1,5 @@
-var Sequelize = require('sequelize');
-var sequelize = require('./sequelizeDatabase');
-var Anime = require('./anime');
-var Genre = require('./genre');
+const Sequelize = require('sequelize')
+const sequelize = require('../config/index')
 
 module.exports = sequelize.define('anime_genre', {
     fk_anime_id_anime_genre: {
@@ -17,4 +15,4 @@ module.exports = sequelize.define('anime_genre', {
     underscored: true,
     freezeTableName: true,
     tableName: 'anime_genre'
-});
+})

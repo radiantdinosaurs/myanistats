@@ -1,5 +1,5 @@
-var Sequelize = require('sequelize');
-var sequelize = require('./sequelizeDatabase');
+const Sequelize = require('sequelize')
+const sequelize = require('../config/index')
 
 module.exports = sequelize.define('user_anime', {
     fk_anime_id_user_anime: {
@@ -7,8 +7,8 @@ module.exports = sequelize.define('user_anime', {
         allowNull: false
     },
     fk_user_id_user_anime: {
-      type: Sequelize.INTEGER,
-      allowNull: false
+        type: Sequelize.INTEGER,
+        allowNull: false
     },
     my_watched_episodes: Sequelize.INTEGER,
     my_start_date: Sequelize.DATE,
@@ -22,4 +22,4 @@ module.exports = sequelize.define('user_anime', {
     underscored: true,
     freezeTableName: true,
     tableName: 'user_anime'
-});
+})

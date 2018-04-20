@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = require('./sequelizeDatabase')
+const sequelize = require('../config/index')
 
 module.exports = sequelize.define('anime', {
     id: {

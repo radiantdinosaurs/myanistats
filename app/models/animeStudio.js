@@ -1,5 +1,5 @@
-var Sequelize = require('sequelize');
-var sequelize = require('./sequelizeDatabase');
+const Sequelize = require('sequelize')
+const sequelize = require('../config/index')
 
 module.exports = sequelize.define('anime_studio', {
     fk_anime_id_anime_studio: {
@@ -15,4 +15,4 @@ module.exports = sequelize.define('anime_studio', {
     underscored: true,
     freezeTableName: true,
     tableName: 'anime_studio'
-});
+})

@@ -1,7 +1,5 @@
-var Sequelize = require('sequelize');
-var sequelize = require('./sequelizeDatabase');
-var Anime = require('./anime');
-var Licensor = require('./licensor');
+const Sequelize = require('sequelize')
+const sequelize = require('../config/index')
 
 module.exports = sequelize.define('anime_licensor', {
     fk_anime_id_anime_licensor: {
@@ -17,4 +15,4 @@ module.exports = sequelize.define('anime_licensor', {
     underscored: true,
     freezeTableName: true,
     tableName: 'anime_licensor'
-});
+})
