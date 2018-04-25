@@ -5,15 +5,6 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
     <title>MyAnimeStats</title>
 
-    <!--SCRIPTS-->
-    <script type="application/javascript"
-            src="https://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.0.beta.6.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="chart.js/dist/Chart.js"></script>
-    <script src="bootstrap/dist/js/bootstrap.js"></script>
-    <script src="javascripts/script.js"></script>
-    <!--END SCRIPTS-->
-
     <!--STYLESHEETS-->
     <link href="https://fonts.googleapis.com/css?family=Lato|Slabo+27px" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
@@ -51,17 +42,25 @@
         </div>
         <!--END MAIN CONTENT BODY (HANDLEBARS)-->
 
-        <!--LOADING OVERLAY-->
-        <div class="loading-overlay" id="loading-overlay">
-            <div class="sk-wave" id="spinner">
-                <div class="sk-rect sk-rect1"></div>
-                <div class="sk-rect sk-rect2"></div>
-                <div class="sk-rect sk-rect3"></div>
-                <div class="sk-rect sk-rect4"></div>
-                <div class="sk-rect sk-rect5"></div>
-            </div>
-            <p><em>Getting your info...<br>This may take a few minutes...</em></p>
-        </div>
-        <!--END LOADING OVERLAY-->
+        <!--&lt;!&ndash;LOADING OVERLAY&ndash;&gt;-->
+        <!--<div class="loading-overlay" id="loading-overlay">-->
+            <!--<div class="sk-wave" id="spinner">-->
+                <!--<div class="sk-rect sk-rect1"></div>-->
+                <!--<div class="sk-rect sk-rect2"></div>-->
+                <!--<div class="sk-rect sk-rect3"></div>-->
+                <!--<div class="sk-rect sk-rect4"></div>-->
+                <!--<div class="sk-rect sk-rect5"></div>-->
+            <!--</div>-->
+            <!--<p><em>Getting your info...<br>This may take a few minutes...</em></p>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;END LOADING OVERLAY&ndash;&gt;-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="scripts/script.js"></script>
+        <!--SCRIPTS-->
+        <script type="application/javascript"
+                src="https://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.0.beta.6.js"></script>
+        <script src="chart.js/dist/Chart.js"></script>
+        <script src="bootstrap/dist/js/bootstrap.js"></script>
+        <!--END SCRIPTS-->
     </body>
 </html>

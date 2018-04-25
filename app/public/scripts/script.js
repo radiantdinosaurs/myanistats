@@ -1,4 +1,5 @@
-$(document).ready(function() {
+$(function() {
+    alert('hi')
     $('#loading-overlay').hide(); // Hiding the loading overlay
     $('#search-submit-btn').click(function(e) {
         e.preventDefault();
@@ -9,7 +10,7 @@ $(document).ready(function() {
             data: {user: user},
             xhrFields: {withCredentials: false},
             headers: {},
-            beforeSend: function(){$('#loading-overlay').show();},
+            // beforeSend: function(){$('#loading-overlay').show();},
             complete: function(){$('#loading-overlay').hide();},
             success: function(data) {
                 $('#landing-page-content').hide(); // Hiding any content on the page that isn't user stats

@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, '/bower_components'))) // TODO: Same
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, '/public')))
 app.use(bodyParser.json({limit: '50mb'}))
-app.use(bodyParser.urlencoded({limit: '50mb', extended: false, parameterLimit: 50000}))
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit: 50000}))
 app.engine('handlebars', exphbs({defaultLayout: 'main', layoutsDir: path.join(__dirname, 'views/layouts')}))
 app.set('view engine', 'handlebars')
 // Handlebars.registerHelper('raw-helper', (options) => { return options.fn() })
