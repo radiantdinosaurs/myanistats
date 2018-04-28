@@ -2,11 +2,11 @@
 
 const express = require('express')
 const router = express.Router()
-const index = require('./search/indexController')
+const search = require('./search/index')
 
 router.get('/', (request, response) => {
     response.status(200).render('index', {title: 'MyAnimeStats'})
 })
-router.post('/', index.postUsernameSearch)
+router.post('/', search.postUsernameSearch)
 
 module.exports = router

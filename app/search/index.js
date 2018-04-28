@@ -3,5 +3,6 @@
 const controller = require('./controller')
 
 module.exports = {
-    handleGettingAnime: controller.handleGettingAnime
+    handleGettingAnime: controller.handleGettingAnime,
+    handlePostSearch: controller.handlePostSearch
 }
