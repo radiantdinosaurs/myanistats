@@ -10,14 +10,14 @@ const exphbs = require('express-handlebars')
 // const Handlebars = require('handlebars')
 // const hbs = expressHandlebars().create({defaultLayout: 'main'})
 
-// config ===============================
+// database_config ===============================
 app.set('port', (process.env.port || 8000))
-app.use(express.static(path.join(__dirname, '/bower_components'))) // TODO: Same notes here as above, but also look more into Bower
-app.set('views', path.join(__dirname, 'views'))
-app.use(express.static(path.join(__dirname, '/public')))
+app.use(express.static(path.join(__dirname, '/bower_components')))
+app.set('views', path.join(__dirname, '/ui/views'))
+app.use(express.static(path.join(__dirname, 'ui//public')))
 app.use(bodyParser.json({limit: '50mb'}))
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit: 50000}))
-app.engine('handlebars', exphbs({defaultLayout: 'main', layoutsDir: path.join(__dirname, 'views/layouts')}))
+app.engine('handlebars', exphbs({defaultLayout: 'main', layoutsDir: path.join(__dirname, 'ui/views/layouts')}))
 app.set('view engine', 'handlebars')
 // Handlebars.registerHelper('raw-helper', (options) => { return options.fn() })
 

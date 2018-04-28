@@ -1,14 +1,23 @@
 'use strict'
 
-const logger = require('../logging/index')
-const returnError = require('../errors/index')
+const Anime = require('./anime')
 
-function recordNeedsUpdating(userLastUpdated) {
-    const currentDate = new Date()
-    const timeDifference = Math.abs(currentDate.getTime() - userLastUpdated.getTime())
-    const dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24))
-    if (dayDifference <= 5) {
-        logger.log('info', 'Doesnt need to be updated')
-        return false
-    } else return true
+function findAnimeById(animeId) {
+    const attributesParameters = ['id', 'title', 'link_canonical', 'image_url', 'type', 'episodes', 'aired_string',
+        'duration', 'rating', 'score', 'scored_by', 'rank', 'synopsis', 'background', 'premiered']
+    const whereParameters = {id: animeId}
+    return Anime.findAll({attributes: attributesParameters, where: whereParameters}).then((anime) => {
+        return anime
+    })
+}
+
+function bulkInsertAnime(animeList) {
+    return Anime.bulkCreate(animeList).then((anime) => {
+        return anime
+    })
+}
+
+module.exports = {
+    findAnimeById: findAnimeById,
+    bulkInsertAnime: bulkInsertAnime
 }

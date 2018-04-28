@@ -1,95 +1,47 @@
 const userController = require('../user/index')
+const animeController = require('../anime/index')
 const requestController = require('../request/index')
+const requestProcess = require('./index')
 const logger = require('../logging/index')
-// const sequelize = require('../config/index')
-// sequelize.sync()
+const validate = require('../security/validator')
+const validationResult = require('express-validator/check').validationResult
+const returnError = require('../errors/index')
+const tableRelationships = require('../database_config/associations')
+tableRelationships.tableRelationships()
 
-function postUsernameSearch(request, response, next) {
-    const username = request.body.user // TODO: Sanitize and verify user input
-    userController.getUser(username).then((user) => {
-        if (!user.updatedOrCreated) {
-            response.status(200).send(user)
+const handlePostUsernameSearch = [
+    validate.validateSearchForm,
+    function postUsernameSearch(request, response, next) {
+        const username = request.body.user
+        const errors = validationResult(request)
+        if (!errors.isEmpty()) {
+            response.status(200).render('index', {errors: errors.array()}) // TODO: Front-end error rendering
         } else {
-            // Here's where we have to do the real work
+            animeController.handleGettingAnime(username).then((result) => {
+                console.log('done')
+            }).catch((error) => {
+                logger.log('error', error)
+            })
+            // userController.getUser(username)
+            //     .then((user) => {
+            //         if (!user.updatedOrCreated) {
+            //             // Here's where we get the users info from the database and send it
+            //         } else if (user.updatedOrCreated) {
+            //             // Here's where we have to make Jikan requests and all
+            //             animeController.handleGettingUserAnime(username)
+            //         } else next(returnError.unexpectedError())
+            //     })
+            //     .catch((error) => {
+            //         logger.log('error', error)
+            //     })
         }
-    }).catch((error) => {
-        logger.log('error', error)
-        next(error)
-    })
-}
+    }
+]
 
 module.exports = {
-    postUsernameSearch: postUsernameSearch
+    postUsernameSearch: handlePostUsernameSearch
 }
 
-// let async = require('async');
-//     var client = require('node-rest-client').Client;
-//     var client = new client();
-// // Database relationships
-//     Anime.belongsToMany(User, {through: {model: UserAnime, unique: false}, foreignKey: 'fk_anime_id_user_anime'});
-//     Anime.belongsToMany(Genre, {through: {model: AnimeGenre, unique: false}, foreignKey: 'fk_anime_id_anime_genre'});
-//     Anime.belongsToMany(Producer, {through: {model: AnimeProducer, unique: false},
-//         foreignKey: 'fk_anime_id_anime_producer'});
-//     Anime.belongsToMany(Licensor, {through: {model: AnimeLicensor, unique: false},
-//         foreignKey: 'fk_anime_id_anime_licensor'});
-//     Anime.belongsToMany(Studio, {through: {model: AnimeStudio, unique: false}, foreignKey: 'fk_anime_id_anime_studio'});
-//     User.belongsToMany(Anime, {through: {model: UserAnime, unique: false}, foreignKey: 'fk_user_id_user_anime'});
-//     Genre.belongsToMany(Anime, {through: {model: AnimeGenre, unique: false}, foreignKey: 'fk_genre_id'});
-//     Producer.belongsToMany(Anime, {through: {model: AnimeProducer, unique: false}, foreignKey: 'fk_producer_id'});
-//     Licensor.belongsToMany(Anime, {through: {model: AnimeLicensor, unique: false}, foreignKey: 'fk_licensor_id'});
-//     Studio.belongsToMany(Anime, {through: {model: AnimeStudio, unique: false}, foreignKey: 'fk_studio_id'});
-// // Database tables
-// let Anime = require('../models/anime'),
-//     User = require('../models/user'),
-//     Genre = require('../models/genre'),
-//     UserAnime = require('../models/userAnime'),
-//     AnimeGenre = require('../models/animeGenre'),
-//     AnimeLicensor = require('../models/animeLicensor'),
-//     AnimeStudio = require('../models/animeStudio'),
-//     AnimeProducer = require('../models/animeProducer'),
-//     Producer = require('../models/producer'),
-//     Studio = require('../models/studio'),
-//     Licensor = require('../models/licensor');
-//
-//     async.waterfall([
-//         findAnimeInDatabase,
-//         getAnimeFromJikanApi,
-//         insertAnime,
-//         insertGenre,
-//         insertProducer,
-//         insertStudio,
-//         insertLicensor,
-//         getInformationFromDatabase,
-//         processInformation,
-//         ], function(err, userData) {
-//             response.json(userData)
-//     });
-//
-//
-//
-//     // TODO: Find out why response is sent to AJAX here when user has long list
-//     /**
-//      * Sends requests to Jikan API for anime not in the database
-//      * @param malAnimeData User's list of anime (anime not found in the database)
-//      * @param user Model instance from Sequelize
-//      * @param callback Called on success
-//      */
-//     function getAnimeFromJikanApi(user, malAnimeData, callback) {
-//         // If the user was not created or updated, we already have all their anime in the database
-//         if(malAnimeData === undefined || malAnimeData === null) {
-//             console.log('Still moving down the waterfall...');
-//             callback(null, user, null)
-//         }
-//         else {
-//             let jikanAnime = [];
-//             // In this function, we'll make requests to Jikan API for each remaining anime on malAnimeData
-//             let getAnime = function(completedRequests) {
-//                 if(completedRequests < malAnimeData.length) {
-//                     console.log('Making request to Jikan...');
-//                     let animeId = malAnimeData[completedRequests].series_animedb_id;
-//                     let args = {path: {'id': animeId}};
-//                     client.get('http://jikan.me/api/anime/${id}', args, function(jikanData, res) {
-//                         if(res.statusCode !== 429) {
 //                             let myStartDate = malAnimeData[completedRequests].my_start_date === '0000-00-00'
 //                                 ? null : malAnimeData[completedRequests].my_start_date;
 //                             let myFinishDate = malAnimeData[completedRequests].my_finish_date === '0000-00-00'
@@ -132,26 +84,30 @@ module.exports = {
 //                             jikanAnime.push(animeData);
 //                             getAnime(completedRequests+1);
 //                         }
-//                         else {
-//                             console.log('You reached your daily limit.');
-//                             callback(null, user, null);
+
+
+//                     Anime.findOne({
+//                         attributes: ['id', 'link_canonical', 'synopsis', 'title', 'image', 'synonyms', 'type',
+//                             'episodes', 'status', 'aired', 'premiered', 'source', 'duration', 'rating', 'score',
+//                             'number_of_votes', 'ranked', 'popularity', 'members', 'favorites'],
+//                         where: {id: animeId}
+//                     }).then(anime => {
+//                         if(anime !== null) {
+//                             user.addAnime(anime, {through: {
+//                                 my_watched_episodes: malAnimeData[completedRequests].my_watched_episodes,
+//                                 my_start_date: myStartDate,
+//                                 my_finish_date: myFinishDate,
+//                                 my_score: malAnimeData[completedRequests].my_score,
+//                                 my_status: malAnimeData[completedRequests].my_status,
+//                                 my_rewatching: myRewatching,
+//                                 my_rewatching_episodes: malAnimeData[completedRequests].my_rewatching_ep,
+//                             }}).then(() => {
+//                                 console.log('We have the anime/user relationship defined!');
+//                                 malAnimeData.splice(completedRequests, 1); // Removing the found anime from the MAL array
+//                                 getAnime(completedRequests); // No increment, there's a new value at the current index to query
+//                             })
 //                         }
-//                     }).on('error', function (err) {
-//                         console.log('Something went wrong on the request', err.req.options);
-//                     });
-//                     client.on('error', function (err) {
-//                         console.log('Something went wrong on the client', err);
-//                     });
-//                 }
-//                 else if(completedRequests === malAnimeData.length) {
-//                     console.log('Done making requests to Jikan!');
-//                     callback(null, user, jikanAnime);
-//                 }
-//             };
-//             getAnime(0);
-//         }
-//     }
-//
+
 //     /**
 //      * Inserts anime into the database
 //      * @param user Model instance from Sequelize
@@ -288,160 +244,7 @@ module.exports = {
 //      * @param jikanAnime Array list of anime objects
 //      * @param callback Called on success
 //      */
-//     function insertProducer(user, jikanAnime, callback) {
-//         // If the user was not created or updated, we already have all their anime in the database
-//         if(jikanAnime === undefined || jikanAnime === null) {
-//             console.log('Still moving down the waterfall...');
-//             callback(null, user, null)
-//         }
-//         else {
-//             let relationshipProducer = [];
-//             let producerList = [];
-//             let makeProducerList = function(completedRequests) {
-//                 if(completedRequests < jikanAnime.length) {
-//                     console.log('Making producer lists...');
-//                     if(jikanAnime[completedRequests].producer !== false) {
-//                         uniqueListCreator(producerList, jikanAnime[completedRequests].producer);
-//                         relationshipTableListCreator(relationshipProducer, jikanAnime[completedRequests].id,
-//                             jikanAnime[completedRequests].producer, 'fk_anime_id_anime_producer', 'fk_producer_id');
-//                         makeProducerList(completedRequests+1);
-//                     }
-//                     else {
-//                         makeProducerList(completedRequests+1);
-//                     }
-//                 }
-//                 else {
-//                     let insertAnimeProducerRelationship = function(completedRequests) {
-//                         if(completedRequests < relationshipProducer.length) {
-//                             console.log('Inserting anime/producer relationship into table...');
-//                             Producer.findOrCreate({
-//                                 where: {name: relationshipProducer[completedRequests].fk_producer_id}
-//                             }).spread((producer, created) => {
-//                                 Anime.findOne({
-//                                     where: {id: relationshipProducer[completedRequests].fk_anime_id_anime_producer}
-//                                 }).then(anime => {
-//                                     producer.addAnime(anime).then(insertAnimeProducerRelationship(completedRequests+1))
-//                                 })
-//                             })
-//                         }
-//                         else {
-//                             callback(null, user, jikanAnime);
-//                         }
-//                     };
-//                     console.log('Inserting producer into table...');
-//                     Producer.bulkCreate(producerList, {ignoreDuplicates: true}).then(insertAnimeProducerRelationship(0));
-//                 }
-//             };
-//             makeProducerList(0);
-//         }
-//     }
-//
-//     /**
-//      * Inserts studio(s) into the database and any relationship between anime/studio
-//      * @param user Model instance from Sequelize
-//      * @param jikanAnime Array list of anime objects
-//      * @param callback Called on success
-//      */
-//     function insertStudio(user, jikanAnime, callback) {
-//         // If the user was not created or updated, we already have all their anime in the database
-//         if(jikanAnime === undefined || jikanAnime === null) {
-//             console.log('Still moving down the waterfall...');
-//             callback(null, user, null)
-//         }
-//         else {
-//             let relationshipStudio = [];
-//             let studioList = [];
-//             let makeStudioList = function(completedRequests) {
-//                 if(completedRequests < jikanAnime.length) {
-//                     if(jikanAnime[completedRequests].studio !== false) {
-//                         uniqueListCreator(studioList, jikanAnime[completedRequests].studio);
-//                         relationshipTableListCreator(relationshipStudio, jikanAnime[completedRequests].id,
-//                             jikanAnime[completedRequests].studio, 'fk_anime_id_anime_studio', 'fk_studio_id');
-//                         makeStudioList(completedRequests+1);
-//                     }
-//                     else {
-//                         makeStudioList(completedRequests+1);
-//                     }
-//                 }
-//                 else {
-//                     let insertStudioAnimeRelationship = function(completedRequests) {
-//                         if(completedRequests < relationshipStudio.length) {
-//                             console.log('Inserting anime/studio relationship into table...');
-//                             Studio.findOrCreate({
-//                                 where: {name: relationshipStudio[completedRequests].fk_studio_id}
-//                             }).spread((studio, created) => {
-//                                 Anime.findOne({
-//                                     where: {id: relationshipStudio[completedRequests].fk_anime_id_anime_studio}
-//                                 }).then(anime => {
-//                                     studio.addAnime(anime).then(insertStudioAnimeRelationship(completedRequests+1))
-//                                 })
-//                             })
-//                         }
-//                         else {
-//                             callback(null, user, jikanAnime);
-//                         }
-//                     };
-//                     console.log('Inserting studio into table...');
-//                     Studio.bulkCreate(studioList, {ignoreDuplicates: true}).then(insertStudioAnimeRelationship(0));
-//                 }
-//             };
-//             makeStudioList(0);
-//         }
-//     }
-//
-//     /**
-//      * Inserts licensor(s) into the database and any relationship between anime/licensor
-//      * @param user Model instance from Sequelize
-//      * @param jikanAnime Array list of anime objects
-//      * @param callback Called on success
-//      */
-//     function insertLicensor(user, jikanAnime, callback) {
-//         // If the user was not created or updated, we already have all their anime in the database
-//         if(jikanAnime === undefined || jikanAnime === null) {
-//             console.log('Still moving down the waterfall...');
-//             callback(null, user);
-//         }
-//         else {
-//             let relationshipLicensor = [];
-//             let licensorList = [];
-//             let makeLicensorList = function(completedRequests) {
-//                 if(completedRequests < jikanAnime.length) {
-//                     if(jikanAnime[completedRequests].licensor !== false) {
-//                         uniqueListCreator(licensorList, jikanAnime[completedRequests].licensor);
-//                         relationshipTableListCreator(relationshipLicensor, jikanAnime[completedRequests].id,
-//                             jikanAnime[completedRequests].licensor, 'fk_anime_id_anime_licensor', 'fk_licensor_id');
-//                         makeLicensorList(completedRequests+1);
-//                     }
-//                     else {
-//                         makeLicensorList(completedRequests+1);
-//                     }
-//                 }
-//                 else {
-//                     let insertAnimeLicensorRelationship = function(completedRequests) {
-//                         if(completedRequests < relationshipLicensor.length) {
-//                             console.log('Inserting anime/licensor relationship into table...');
-//                             Licensor.findOrCreate({
-//                                 where: {name: relationshipLicensor[completedRequests].fk_licensor_id}
-//                             }).spread((licensor, created) => {
-//                                 Anime.findOne({
-//                                     where: {id: relationshipLicensor[completedRequests].fk_anime_id_anime_licensor}
-//                                 }).then(anime => {
-//                                     licensor.addAnime(anime).then(insertAnimeLicensorRelationship(completedRequests+1));
-//                                 })
-//                             })
-//                         }
-//                         else {
-//                             callback(null, user);
-//                         }
-//                     };
-//                     console.log('Inserting licensor into table...');
-//                     Licensor.bulkCreate(licensorList, {ignoreDuplicates: true}).then(insertAnimeLicensorRelationship(0));
-//                 }
-//             };
-//             makeLicensorList(0);
-//         }
-//     }
-//
+
 //     /**
 //      * Queries the database for all information needed, which is currently anime, genre, and related
 //      * relationship tables

@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../config/index')
+const sequelize = require('../database_config/connection')
 
 module.exports = sequelize.define('anime', {
     id: {
@@ -9,38 +9,26 @@ module.exports = sequelize.define('anime', {
         primaryKey: true,
         unique: true
     },
-    link_canonical: {
-        type: Sequelize.STRING
-    },
-    synopsis: {
-        type: Sequelize.TEXT
-    },
     title: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    image: {
+    link_canonical: {
         type: Sequelize.STRING
     },
-    synonyms: {
-        type: Sequelize.TEXT
+    image_url: {
+        type: Sequelize.STRING
     },
     type: {
         type: Sequelize.STRING
     },
+    source: {
+        type: Sequelize.TEXT
+    },
     episodes: {
         type: Sequelize.INTEGER
     },
-    status: {
-        type: Sequelize.STRING
-    },
-    aired: {
-        type: Sequelize.STRING
-    },
-    premiered: {
-        type: Sequelize.STRING
-    },
-    source: {
+    aired_string: {
         type: Sequelize.STRING
     },
     duration: {
@@ -52,22 +40,22 @@ module.exports = sequelize.define('anime', {
     score: {
         type: Sequelize.INTEGER
     },
-    number_of_votes: {
+    scored_by: {
         type: Sequelize.INTEGER
     },
-    ranked: {
+    rank: {
         type: Sequelize.INTEGER
     },
-    popularity: {
-        type: Sequelize.INTEGER
+    synopsis: {
+        type: Sequelize.TEXT
     },
-    members: {
-        type: Sequelize.INTEGER
+    background: {
+        type: Sequelize.TEXT
     },
-    favorites: {
-        type: Sequelize.INTEGER
+    premiered: {
+        type: Sequelize.STRING
     }}, {
-    timestamps: false,
+    timestamps: true,
     underscored: true,
     freezeTableName: true,
     tableName: 'anime'

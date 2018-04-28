@@ -1,19 +1,15 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../config/index')
+const sequelize = require('../database_config/connection')
 
-module.exports = sequelize.define('genre', {
+module.exports = sequelize.define('studio', {
     name: {
         type: Sequelize.STRING,
         unique: true,
         primaryKey: true,
         allowNull: false
-    },
-    jikan_id: {
-        type: Sequelize.STRING,
-        unique: true
     }}, {
     timestamps: false,
     underscored: true,
     freezeTableName: true,
-    tableName: 'genre'
+    tableName: 'studio'
 })

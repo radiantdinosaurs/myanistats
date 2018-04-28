@@ -3,5 +3,7 @@
 const controller = require('./controller')
 
 module.exports = {
-    requestMyAnimeListUser: controller.requestMyAnimeListUser
+    requestMalUser: controller.requestMalUser,
+    requestJikanAnime: controller.requestJikanAnime,
+    handleMakingBulkJikanRequests: controller.handleMakingBulkJikanRequests
 }

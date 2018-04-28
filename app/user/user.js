@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../config/index')
+const sequelize = require('../database_config/connection')
 
 module.exports = sequelize.define('user', {
     id: {

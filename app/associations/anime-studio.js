@@ -1,12 +1,12 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../config/index')
+const sequelize = require('../database_config/connection')
 
-module.exports = sequelize.define('anime_producer', {
-    fk_anime_id_anime_producer: {
+module.exports = sequelize.define('anime_studio', {
+    fk_anime_id_anime_studio: {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    fk_producer_id: {
+    fk_studio_id: {
         type: Sequelize.STRING,
         allowNull: false
     }
@@ -14,5 +14,5 @@ module.exports = sequelize.define('anime_producer', {
     timestamps: false,
     underscored: true,
     freezeTableName: true,
-    tableName: 'anime_producer'
+    tableName: 'anime_studio'
 })

@@ -17,9 +17,24 @@ module.exports = {
         error.code = 400
         return error
     },
-    problemRequestingMyAnimeListUser: () => {
+    problemRequestingMal: () => {
         const error = new Error('We can\'t seem to get in touch with MyAnimeList right now. Please check back later!')
         error.code = 500
+        return error
+    },
+    problemRequestingJikan: () => {
+        const error = new Error('We can\'t seem to get in touch with Jikan right now. Please check back later!')
+        error.code = 500
+        return error
+    },
+    jikanLimitReached: () => {
+        const error = new Error('Looks like we\'ve reached the limit on our requests to Jikan.')
+        error.code = 500
+        return error
+    },
+    emptyArgument: () => {
+        const error = new Error('Argument is empty.')
+        error.code = 400
         return error
     }
 }
