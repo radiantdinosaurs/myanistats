@@ -7,6 +7,7 @@ const path = require('path')
 const logger = require('./logging/index')
 const returnError = require('./errors/index')
 const exphbs = require('express-handlebars')
+require('./database_config/associations').tableRelationships()
 // const Handlebars = require('handlebars')
 // const hbs = expressHandlebars().create({defaultLayout: 'main'})
 

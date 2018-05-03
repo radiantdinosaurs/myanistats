@@ -3,5 +3,8 @@
 const controller = require('./controller')
 
 module.exports = {
-    getUser: controller.getUser
+    findOneByUsername: controller.findOneByUsername,
+    findOrCreate: controller.findOrCreate,
+    update: controller.update,
+    bulkInsertUserAnimeRelationship: controller.bulkInsertUserAnimeRelationship
 }

@@ -11,8 +11,8 @@ module.exports = sequelize.define('user_anime', {
         allowNull: false
     },
     my_watched_episodes: Sequelize.INTEGER,
-    my_start_date: Sequelize.DATE,
-    my_finish_date: Sequelize.DATE,
+    my_start_date: Sequelize.DATEONLY,
+    my_finish_date: Sequelize.DATEONLY,
     my_score: Sequelize.INTEGER,
     my_status: Sequelize.INTEGER,
     my_rewatching: Sequelize.INTEGER,

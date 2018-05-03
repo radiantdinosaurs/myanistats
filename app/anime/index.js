@@ -3,7 +3,7 @@
 const controller = require('./controller')
 
 module.exports = {
-    findAnimeById: controller.findAnimeById,
-    bulkInsertAnime: controller.bulkInsertAnime,
-    bulkInsertGenre: controller.insertGenre
+    findAllById: controller.findAllById,
+    findAllByUserId: controller.findAllByUserId,
+    bulkInsert: controller.bulkInsert
 }

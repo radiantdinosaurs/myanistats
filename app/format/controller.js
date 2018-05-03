@@ -27,14 +27,136 @@ function removeFromSet(set, list) {
     }
 }
 
-function formatAnimeListForBulkInsert(list) {
+function compileDataForResponse(animeFoundInDb, animeFromJikan, malData) {
+    const meanScore = getMeanScore(malData).toFixed(2)
+    const userInformation = {
+        name: malData.myanimelist.myinfo[0].user_name[0],
+        id: malData.myanimelist.myinfo[0].user_id[0],
+        watching: malData.myanimelist.myinfo[0].user_watching[0],
+        completed: malData.myanimelist.myinfo[0].user_completed[0],
+        on_hold: malData.myanimelist.myinfo[0].user_onhold[0],
+        dropped: malData.myanimelist.myinfo[0].user_dropped[0],
+        plan_to_watch: malData.myanimelist.myinfo[0].user_plantowatch[0],
+        days_spent_watching: malData.myanimelist.myinfo[0].user_days_spent_watching[0],
+        mean_score: meanScore
+    }
+    const data = {}
+    data.genres = handleMakingGenreList(animeFoundInDb, animeFromJikan)
+    data.premiered = handleMakingPremieredList(animeFoundInDb, animeFromJikan)
+    data.source = handleMakingSourceList(animeFoundInDb, animeFromJikan)
+    data.user_information = userInformation
+    return data
+}
+
+function handleMakingPremieredList(animeFromDb, animeFromJikan) {
+    const premieredList = {}
+    getPremieredFromAnimeObject(animeFromDb, premieredList)
+    getPremieredFromJikanAnime(animeFromJikan, premieredList)
+    return premieredList
+}
+
+function getPremieredFromAnimeObject(list, object) {
+    for (let i = 0; i < list.length; i++) {
+        if (object.hasOwnProperty(list[i].dataValues.premiered)) {
+            object[list[i].dataValues.premiered] += 1
+        } else {
+            object[list[i].dataValues.premiered] = 1
+        }
+    }
+}
+
+function getPremieredFromJikanAnime(list, object) {
+    for (let i = 0; i < list.length; i++) {
+        if (object.hasOwnProperty(list[i].premiered)) {
+            object[list[i].premiered] += 1
+        } else {
+            object[list[i].premiered] = 1
+        }
+    }
+}
+
+function handleMakingSourceList(animeFromDb, animeFromJikan) {
+    const sourceList = {}
+    getSourceFromAnimeObject(animeFromDb, sourceList)
+    getSourceFromJikanAnime(animeFromJikan, sourceList)
+    return sourceList
+}
+
+function getSourceFromAnimeObject(list, object) {
+    for (let i = 0; i < list.length; i++) {
+        if (object.hasOwnProperty(list[i].dataValues.source)) {
+            object[list[i].dataValues.source] += 1
+        } else {
+            object[list[i].dataValues.source] = 1
+        }
+    }
+}
+
+function getSourceFromJikanAnime(list, object) {
+    for (let i = 0; i < list.length; i++) {
+        if (object.hasOwnProperty(list[i].source)) {
+            object[list[i].source] += 1
+        } else {
+            object[list[i].source] = 1
+        }
+    }
+}
+
+function handleMakingGenreList(animeFromDb, animeFromJikan) {
+    const genreObject = {}
+    getGenreListFromAnimeObject(animeFromDb, genreObject)
+    getGenreListFromJikanAnime(animeFromJikan, genreObject)
+    return genreObject
+}
+
+function getGenreListFromAnimeObject(list, genreObject) {
+    for (let i = 0; i < list.length; i++) {
+        for (let j = 0; j < list[i].dataValues.genres.length; j++) {
+            if (genreObject.hasOwnProperty((list[i].dataValues.genres[j].dataValues.name))) {
+                genreObject[list[i].dataValues.genres[j].dataValues.name] += 1
+            } else {
+                genreObject[list[i].dataValues.genres[j].dataValues.name] = 1
+            }
+        }
+    }
+    return genreObject
+}
+
+function getGenreListFromJikanAnime(list, genreObject) {
+    console.log(list.length)
+    for (let i = 0; i < list.length; i++) {
+        for (let j = 0; j < list[i].genre.length; j++) {
+            if (genreObject.hasOwnProperty(list[i].genre[j].name)) {
+                genreObject[list[i].genre[j].name] += 1
+            } else {
+                genreObject[list[i].genre[j].name] = 1
+            }
+        }
+    }
+    return genreObject
+}
+
+function getMeanScore(malData) {
+    let mean = 0
+    let numberRated = 0
+    for (let i = 0; i < malData.myanimelist.anime.length; i++) {
+        let myScore = Number(malData.myanimelist.anime[i].my_score[0])
+        if (myScore > 0) {
+            numberRated++
+            mean += Number(malData.myanimelist.anime[i].my_score[0])
+        }
+    }
+    return mean / numberRated
+}
+
+function formatAnimeForBulkInsert(list) {
     let formattedList = []
     for (let i = 0; i < list.length; i++) {
         let anime = {
             id: list[i].mal_id,
-            title: list[i].title,
-            link_canonical: list[i].link_canonical,
-            image_url: list[i].image_url,
+            title: String(list[i].title),
+            link_canonical: String(list[i].link_canonical),
+            image_url: String(list[i].image_url),
             type: list[i].type,
             source: list[i].source,
             episodes: list[i].episodes,
@@ -53,72 +175,68 @@ function formatAnimeListForBulkInsert(list) {
     return formattedList
 }
 
-function formatGenreListForBulkInsert(list) {
-    let formattedList = []
-    for (let i = 0; i < list.length; i++) {
-        for (let j = 0; j < list[i].genre.length; j++) {
-            if (list[i].genre.length) {
-                let genre = {
-                    fk_anime_id_anime_genre: list[i].mal_id,
-                    fk_genre_id: list[i].genre[j].name
-                }
-                formattedList.push(genre)
-            }
-        }
+function formatUserAnimeForBulkInsert(userId, jikanList, malData) {
+    const malMap = makeMalMap(malData.myanimelist.anime)
+    let string = 'INSERT INTO `user_anime` (fk_anime_id_user_anime, fk_user_id_user_anime, my_watched_episodes, my_start_date,' +
+        ' my_finish_date, my_score, my_status, my_rewatching, my_rewatching_episodes) VALUES '
+    for (let i = 0; i < jikanList.length; i++) {
+        const watchingInfo = malMap.get(Number(jikanList[i].mal_id))
+        let bit = '(' + jikanList[i].mal_id + ',' + userId + ',' + Number(watchingInfo.my_watched_episodes) + ',' + watchingInfo.my_start_date +
+            ',' + watchingInfo.my_finish_date + ',' + Number(watchingInfo.my_score) + ',' + Number(watchingInfo.my_status) + ',' +
+            Number(watchingInfo.my_rewatching) + ',' + Number(watchingInfo.my_rewatching_episodes) + '),'
+        string += bit
     }
-    return formattedList
+    return string.substring(0, string.length - 1)
 }
 
-function formatLicensorListForBulkInsert(list) {
-    let formattedList = []
-    for (let i = 0; i < list.length; i++) {
-        for (let j = 0; j < list[i].licensor.length; j++) {
-            if (list[i].licensor.length) {
-                let licensor = {
-                    fk_anime_id_anime_licensor: list[i].mal_id,
-                    fk_licensor_id: list[i].licensor[j].name
-                }
-                formattedList.push(licensor)
-            }
+function makeMalMap(malData) {
+    const map = new Map()
+    for (let i = 0; i < malData.length; i++) {
+        let key = Number(malData[i].series_animedb_id[0])
+        let values = {
+            my_watched_episodes: malData[i].my_watched_episodes[0],
+            my_start_date: (malData[i].my_start_date[0] === '0000-00-00') ? null : '\'' + malData[i].my_start_date[0] + '\'',
+            my_finish_date: (malData[i].my_finish_date[0] === '0000-00-00') ? null : '\'' + (malData[i].my_finish_date[0]) + '\'',
+            my_score: malData[i].my_score[0],
+            my_status: malData[i].my_status[0],
+            my_rewatching: malData[i].my_rewatching[0],
+            my_rewatching_episodes: malData[i].my_rewatching_ep[0]
         }
+        map.set(key, values)
     }
-    return formattedList
+    return map
 }
 
-function formatProducerListForBulkInsert(list) {
-    let formattedList = []
+function formatAssociationsForBulkInsert(list, databaseQuery, parameter) {
+    const genreArray = []
+    const genreSet = new Set()
+    const quotationMark = String.raw`'`
     for (let i = 0; i < list.length; i++) {
-        for (let j = 0; j < list[i].producer.length; j++) {
-            if (list[i].producer.length) {
-                let producer = {
-                    fk_anime_id_anime_producer: list[i].mal_id,
-                    fk_producer_id: list[i].producer[j].name
-                }
-                formattedList.push(producer)
-            }
+        for (let j = 0; j < list[i][parameter].length; j++) {
+            genreSet.add(list[i][parameter][j].name)
+            databaseQuery += '(' + list[i].mal_id + ',' + quotationMark + list[i][parameter][j].name + quotationMark + '),'
         }
     }
-    return formattedList
+    genreArray.push(databaseQuery.substring(0, databaseQuery.length - 1))
+    genreArray.push(setToArray(genreSet))
+    return genreArray
 }
 
-function formatStudioListForBulkInsert(list) {
-    let formattedList = []
-    for (let i = 0; i < list.length; i++) {
-        for (let j = 0; j < list[i].studio.length; j++) {
-            if (list[i].studio.length) {
-                let studio = {
-                    fk_anime_id_anime_studio: list[i].mal_id,
-                    fk_studio_id: list[i].studio[j].name
-                }
-                formattedList.push(studio)
-            }
-        }
-    }
-    return formattedList
+function setToArray(set) {
+    const array = []
+    set.forEach((value) => {
+        let newValue = {name: value}
+        array.push(newValue)
+    })
+    return array
 }
 
 module.exports = {
-    listToSet: objectToSet,
     removeFromSet: removeFromSet,
-    formatAnimeListForBulkInsert: formatAnimeListForBulkInsert
+    objectToSet: objectToSet,
+    handleMakingGenreList: handleMakingGenreList,
+    compileDataForResponse: compileDataForResponse,
+    formatAnimeForBulkInsert: formatAnimeForBulkInsert,
+    formatUserAnimeForBulkInsert: formatUserAnimeForBulkInsert,
+    formatAssociationsForBulkInsert: formatAssociationsForBulkInsert
 }

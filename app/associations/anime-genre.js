@@ -4,11 +4,13 @@ const sequelize = require('../database_config/connection')
 module.exports = sequelize.define('anime_genre', {
     fk_anime_id_anime_genre: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        primaryKey: false
     },
     fk_genre_id: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        primaryKey: false
     }
 }, {
     timestamps: false,

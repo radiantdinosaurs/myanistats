@@ -26,6 +26,7 @@ function requestMalUser(username) {
 
 function requestJikanAnime(animeId) {
     return new Promise((resolve, reject) => {
+        console.log('Making a request...')
         const TOO_MANY_REQUESTS = 429 // https://jikan.docs.apiary.io/#introduction/information/additional
         const url = 'https://api.jikan.moe/anime/' + animeId
         request(url, (error, response, body) => {
@@ -37,7 +38,9 @@ function requestJikanAnime(animeId) {
                     reject(returnError.problemRequestingJikan())
                 } else if (response.statusCode === TOO_MANY_REQUESTS) {
                     reject(returnError.jikanLimitReached())
-                } else resolve(JSON.parse(body))
+                } else {
+                    resolve(JSON.parse(body))
+                }
             }
         })
     })

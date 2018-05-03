@@ -10,50 +10,64 @@ module.exports = sequelize.define('anime', {
         unique: true
     },
     title: {
-        type: Sequelize.STRING,
+        type: 'VARCHAR(255)',
         allowNull: false
     },
     link_canonical: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true
     },
     image_url: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true
     },
     type: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true
     },
     source: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: true
     },
     episodes: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: true
     },
     aired_string: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true
     },
     duration: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true
     },
     rating: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true
     },
     score: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: true
     },
     scored_by: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: true
     },
     rank: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: true
     },
     synopsis: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: true
     },
     background: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: true
     },
     premiered: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true
     }}, {
     timestamps: true,
     underscored: true,
