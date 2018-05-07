@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../database_config/connection')
+const sequelize = require('../../config/database')
 
-module.exports = sequelize.define('genre', {
+module.exports = sequelize.define('producer', {
     name: {
         type: Sequelize.STRING,
         unique: true,
@@ -11,5 +11,5 @@ module.exports = sequelize.define('genre', {
     timestamps: false,
     underscored: true,
     freezeTableName: true,
-    tableName: 'genre'
+    tableName: 'producer'
 })

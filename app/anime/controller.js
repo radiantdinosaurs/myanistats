@@ -2,7 +2,7 @@
 
 const Anime = require('./anime')
 const User = require('../user/user')
-const Genre = require('../associations/genre')
+const Genre = require('../genre/genre')
 
 /**
  * Finds all Anime through ID, including their associated genres

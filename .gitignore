@@ -105,7 +105,10 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-# OS generated files #
+# OS generated files
 ######################
 .DS_Store
 .DS_Store?
+
+# sensitive data files
+config.json

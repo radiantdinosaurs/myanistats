@@ -3,11 +3,10 @@
 const controller = require('./controller')
 
 module.exports = {
-    removeFromSet: controller.removeFromSet,
-    objectToSet: controller.objectToSet,
-    handleMakingGenreList: controller.handleMakingGenreList,
-    compileDataForResponse: controller.compileDataForResponse,
-    formatAnimeForBulkInsert: controller.formatAnimeForBulkInsert,
-    formatUserAnimeForBulkInsert: controller.formatUserAnimeForBulkInsert,
+    removeAnimeIdFromSet: controller.removeAnimeIdFromSet,
+    malListToSet: controller.malListToSet,
+    compileUserStats: controller.compileUserStats,
+    formatAnimeToSeedDatabaseWith: controller.formatAnimeToSeedDatabaseWith,
+    formatUserRelationshipForBulkInsert: controller.formatUserRelationshipForBulkInsert,
     formatAssociationsForBulkInsert: controller.formatAssociationsForBulkInsert
 }

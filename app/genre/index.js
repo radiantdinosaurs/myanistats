@@ -3,5 +3,5 @@
 const controller = require('./controller')
 
 module.exports = {
-    bulkInsertRawQuery: controller.bulkRawQuery
+    bulkInsert: controller.bulkInsert
 }

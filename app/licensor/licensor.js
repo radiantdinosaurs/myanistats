@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../database_config/connection')
+const sequelize = require('../../config/database')
 
-module.exports = sequelize.define('studio', {
+module.exports = sequelize.define('licensor', {
     name: {
         type: Sequelize.STRING,
         unique: true,
@@ -11,5 +11,5 @@ module.exports = sequelize.define('studio', {
     timestamps: false,
     underscored: true,
     freezeTableName: true,
-    tableName: 'studio'
+    tableName: 'licensor'
 })

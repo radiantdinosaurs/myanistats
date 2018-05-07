@@ -15,9 +15,10 @@ function requestMalUser(username) {
             } else {
                 parseString(body, (error, result) => {
                     if (error) {
+                        logger.log('error', error)
                         reject(returnError.unexpectedError())
-                    }
-                    resolve(result)
+                    } else if (!result.myanimelist) reject(returnError.userNotFound())
+                    else resolve(result)
                 })
             }
         })
@@ -26,21 +27,19 @@ function requestMalUser(username) {
 
 function requestJikanAnime(animeId) {
     return new Promise((resolve, reject) => {
-        console.log('Making a request...')
+        logger.log('info', 'Making a Jikan request...')
         const TOO_MANY_REQUESTS = 429 // https://jikan.docs.apiary.io/#introduction/information/additional
-        const url = 'https://api.jikan.moe/anime/' + animeId
+        const url = 'http://api.jikan.moe/anime/' + animeId
         request(url, (error, response, body) => {
             if (error) {
                 logger.log('error', error)
                 reject(returnError.problemRequestingJikan())
             } else {
                 if (body.error) {
+                    logger.log('error', body.error)
                     reject(returnError.problemRequestingJikan())
-                } else if (response.statusCode === TOO_MANY_REQUESTS) {
-                    reject(returnError.jikanLimitReached())
-                } else {
-                    resolve(JSON.parse(body))
-                }
+                } else if (response.statusCode === TOO_MANY_REQUESTS) reject(returnError.jikanLimitReached())
+                else resolve(JSON.parse(body))
             }
         })
     })
@@ -48,16 +47,11 @@ function requestJikanAnime(animeId) {
 
 async function handleMakingBulkJikanRequests(animeSet) {
     const promises = []
-    animeSet.forEach((animeId) => {
-        promises.push(requestJikanAnime(animeId))
-    })
-    return Promise.all(promises).then((resolved) => {
-        return resolved
-    })
+    animeSet.forEach((animeId) => promises.push(requestJikanAnime(animeId)))
+    return Promise.all(promises).then((resolved) => resolved)
 }
 
 module.exports = {
     requestMalUser: requestMalUser,
-    requestJikanAnime: requestJikanAnime,
     handleMakingBulkJikanRequests: handleMakingBulkJikanRequests
 }

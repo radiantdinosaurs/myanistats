@@ -1,19 +1,19 @@
 'use strict'
 
-const sequelize = require('./connection')
+const sequelize = require('../../config/database')
 
 function associations() {
     const Anime = require('../anime/anime')
     const User = require('../user/user')
-    const Genre = require('../associations/genre')
+    const Genre = require('../genre/genre')
     const UserAnime = require('../associations/user-anime')
     const AnimeGenre = require('../associations/anime-genre')
     const AnimeLicensor = require('../associations/anime-licensor')
     const AnimeStudio = require('../associations/anime-studio')
     const AnimeProducer = require('../associations/anime-producer')
-    const Producer = require('../associations/producer')
-    const Studio = require('../associations/studio')
-    const Licensor = require('../associations/licensor')
+    const Producer = require('../producer/producer')
+    const Studio = require('../studio/studio')
+    const Licensor = require('../licensor/licensor')
     AnimeGenre.removeAttribute('id')
     AnimeLicensor.removeAttribute('id')
     AnimeStudio.removeAttribute('id')

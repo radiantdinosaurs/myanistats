@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../database_config/connection')
+const sequelize = require('../../config/database')
 
 module.exports = sequelize.define('anime_genre', {
     fk_anime_id_anime_genre: {
